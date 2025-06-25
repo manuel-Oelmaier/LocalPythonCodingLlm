@@ -10,15 +10,27 @@
     "Other"
   ],
   "activationEvents": [],
+  "extensionDependencies": [
+    "github.copilot-chat"
+  ],
   "main": "./out/extension.js",
   "contributes": {
-    "commands": [
-      {
-        "command": "test-driven-llm.helloWorld",
-        "title": "Hello World"
-      }
+    "chatParticipants": [
+    {
+        "id": "berlin-llm",
+        "fullName": "Test-driven LLM ",
+        "name": "test-driven-llm",
+        "description": "generates Python code based on unit tests and documentation",
+        "isSticky": true,
+        "commands": [
+          {
+            "name": "help",
+            "description": "display options for usage"
+          }
+        ]
+    }
     ]
-  },
+},
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
