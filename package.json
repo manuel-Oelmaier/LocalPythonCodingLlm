@@ -26,6 +26,18 @@
           {
             "name": "help",
             "description": "display options for usage"
+          },
+          {
+            "name": "detectTests",
+            "description": "TODO"
+          },
+          {
+            "name": "generateCodeFromDescription",
+            "description": "Let the LLM generate code from the passed description"
+          },
+          {
+            "name": "generateCodeFromTests",
+            "description": "Let the LLM generate code from the passed tests"
           }
         ]
     }
