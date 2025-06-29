@@ -17,9 +17,9 @@
   "contributes": {
     "chatParticipants": [
     {
-        "id": "berlin-llm",
-        "fullName": "Test-driven LLM ",
-        "name": "test-driven-llm",
+        "id": "LocalPythonCodingLLM",
+        "fullName": "LocalPythonCodingLLM",
+        "name": "LocalPythonCodingLLM",
         "description": "generates Python code based on unit tests and documentation",
         "isSticky": true,
         "commands": [
@@ -32,13 +32,17 @@
             "description": "TODO"
           },
           {
-            "name": "generateCodeFromDescription",
-            "description": "Let the LLM generate code from the passed description"
+            "name": "queryLLM",
+            "description": "query the LLM with a prompt"
           },
           {
-            "name": "generateCodeFromTests",
-            "description": "Let the LLM generate code from the passed tests"
+            "name": "startLLM",
+            "description": "Load the LLM and get it ready for use"
+          },{
+            "name": "stopLLM",
+            "description": "Stop the LLM process and clean up resources"
           }
+
         ]
     }
     ]
