@@ -1,6 +1,6 @@
 {
-  "name": "test-driven-llm",
-  "displayName": "Test-driven-LLM",
+  "name": "local-python-coding-llm",
+  "displayName": "LocalPythonCodingLLM",
   "description": "This Extensions runs an LLM on unit Test and documentation and writes a function that passes the Tests in Python. ",
   "version": "0.0.1",
   "engines": {
@@ -16,7 +16,7 @@
   "main": "./out/extension.js",
   "contributes": {
     "chatParticipants": [
-    {
+      {
         "id": "LocalPythonCodingLLM",
         "fullName": "LocalPythonCodingLLM",
         "name": "LocalPythonCodingLLM",
@@ -38,15 +38,16 @@
           {
             "name": "startLLM",
             "description": "Load the LLM and get it ready for use"
-          },{
+          },
+          {
             "name": "stopLLM",
             "description": "Stop the LLM process and clean up resources"
           }
-
         ]
-    }
+      }
     ]
-},
+
+  },
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
@@ -56,14 +57,17 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.101.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
+    "@types/vscode": "^1.101.0",
     "@typescript-eslint/eslint-plugin": "^8.31.1",
     "@typescript-eslint/parser": "^8.31.1",
-    "eslint": "^9.25.1",
-    "typescript": "^5.8.3",
     "@vscode/test-cli": "^0.0.10",
-    "@vscode/test-electron": "^2.5.2"
+    "@vscode/test-electron": "^2.5.2",
+    "eslint": "^9.25.1",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@vscode/python-extension": "^1.0.5"
   }
 }

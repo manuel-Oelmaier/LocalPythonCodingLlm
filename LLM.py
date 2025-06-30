@@ -1,9 +1,10 @@
 # llm_server.py
 import sys,torch
-from transformers import AutoModelForCausalLM, AutoTokenizer,pipeline,BitsAndBytesConfig
+from transformers import AutoModelForCausalLM, AutoTokenizer,pipeline,BitsAndBytesConfig,logging
+
+logging.set_verbosity_error()
 
 url = "/home/focus/.cache/huggingface/hub/models--bigcode--starcoderbase-1b/snapshots/182f0165fdf8da9c9935901eec65c94337f01c11"
-
 
 bnb_config = BitsAndBytesConfig(
     load_in_4bit=True,
