@@ -1,5 +1,5 @@
 {
-  "name": "local-python-coding-llm",
+  "name": "LocalPythonCodingLLM",
   "displayName": "LocalPythonCodingLLM",
   "description": "This Extensions runs an LLM on unit Test and documentation and writes a function that passes the Tests in Python. ",
   "version": "0.0.1",
@@ -69,5 +69,10 @@
   },
   "dependencies": {
     "@vscode/python-extension": "^1.0.5"
-  }
+  },
+    "repository": {
+  "type": "git",
+  "url": "https://github.com/manuel-Oelmaier/LocalPythonCodingLlm"
+}
+
 }
