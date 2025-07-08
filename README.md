@@ -3,7 +3,7 @@
 This extensision runs a LLM model locally with python.You can query it in the Chatwindow.
 
 ## Example usage
-![The users asks: @LocalPythonCodingLLM /queryLLM Write a function to count the number of vowels in a given string. test {assert count_vowels("python") == 1, assert count_vowels("a") == 1. The model answers with correct code} ](exampleQuery.png)
+![The users asks: @LocalPythonCodingLLM /queryLLM Write a function to count the number of vowels in a given string. test {assert count_vowels("python") == 1, assert count_vowels("a") == 1. The model answers with correct code} ](example_Query.png)
 ## Features
 - offline 
 - no data collection
