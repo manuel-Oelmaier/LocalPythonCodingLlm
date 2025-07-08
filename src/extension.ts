@@ -137,7 +137,7 @@ export async function activate(context: vscode.ExtensionContext) {
 			} 
 		}
 
-		const modules = await execAsync(activationCommandPythonVenv()+" && pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118");
+		const modules = await execAsync(activationCommandPythonVenv()+" && pip3 install transformers peft bitsandbytes accelerate torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118");
 	}
 
 	async function findPythonCommand(): Promise<'python' | 'python3' | null> {

@@ -1,10 +1,12 @@
 # llm_server.py
 import sys,torch
 from transformers import AutoModelForCausalLM, AutoTokenizer,pipeline,BitsAndBytesConfig,logging
+from peft import PeftModel
 
 logging.set_verbosity_error()
 
-url = "/home/focus/.cache/huggingface/hub/models--bigcode--starcoderbase-1b/snapshots/182f0165fdf8da9c9935901eec65c94337f01c11"
+url = "Models/starcoder"
+basemodel_name = "bigcode/starcoder2-3b"
 
 bnb_config = BitsAndBytesConfig(
     load_in_4bit=True,
@@ -12,11 +14,16 @@ bnb_config = BitsAndBytesConfig(
     bnb_4bit_quant_type="nf4",
     bnb_4bit_compute_dtype=torch.bfloat16
 )
-model = AutoModelForCausalLM.from_pretrained(
-    url,    
-    quantization_config=bnb_config,
-    device_map="auto",
+# get christian to include model type in the fututre ?
+basemodel = AutoModelForCausalLM.from_pretrained(
+    basemodel_name,
+    quantization_config = bnb_config,
+    device_map = "auto"
 )
+
+model = PeftModel.from_pretrained(basemodel, url)
+
+model.enable_adapter_layers()
 
 tokenizer = AutoTokenizer.from_pretrained(url)
 
