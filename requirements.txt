@@ -1,0 +1,7 @@
+transformers 
+peft 
+bitsandbytes 
+accelerate
+torch 
+torchvision 
+torchaudio

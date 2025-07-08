@@ -27,7 +27,7 @@ export async function activate(context: vscode.ExtensionContext) {
 					await startLLMWithChat(stream);
 				}
 				const response = await queryLLM(request.prompt);
-				stream.markdown(response);
+				stream.markdown("Code: \n"+response);
 				break;
 			case "startLLM":
 				if(!LLMready){
@@ -47,7 +47,7 @@ export async function activate(context: vscode.ExtensionContext) {
 			stream.markdown(` Here are some commands you can use:  
 			- help : Show this help message  
 			- detectTests : Detect tests in the current workspace  
-			- queryLLM : query the LLM with a prompt  
+			- queryLLM : query the LLM with a prompt  AND tests
 			- startLLM : Load the LLM and get it ready for use
 			- stopLLM : Stop the LLM process and clean up resources
 			`);			
@@ -65,7 +65,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	let LLMready = false;	
 
 	async function startLLMWithChat(stream_: vscode.ChatResponseStream) {
-		stream_.markdown("Starting the LLM,this may take a few seconds...   \n");
+		stream_.markdown("Starting the LLM, this may take a few seconds...   \n");
 		try{
 			LLM =  await startLLM();
 		}
@@ -80,12 +80,13 @@ export async function activate(context: vscode.ExtensionContext) {
 	async function startLLM(): Promise<ChildProcessWithoutNullStreams> {
 		  return new Promise((resolve, reject) => {
 			const LLMpath = vscode.Uri.joinPath(context.extensionUri, "LLM.py").fsPath;
-			const PythonPath = vscode.Uri.joinPath(context.extensionUri, ".venv/bin/python").fsPath;
+			const PythonPath = vscode.Uri.joinPath(context.extensionUri, ".LocalPythonCodingLLMEnv/bin/python").fsPath;
 
-			const llm = spawn(PythonPath, [LLMpath]);
+			const llm = spawn(PythonPath, [LLMpath],{cwd: context.extensionUri.fsPath});
 
 			llm.stderr.on('data', (data) => {
 				console.error(`LLM Error: ${data}`);
+				reject(new Error(data));
 			});
 
 			llm.on('close', (code) => {
@@ -137,7 +138,9 @@ export async function activate(context: vscode.ExtensionContext) {
 			} 
 		}
 
-		const modules = await execAsync(activationCommandPythonVenv()+" && pip3 install transformers peft bitsandbytes accelerate torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118");
+		const modules = await execAsync(activationCommandPythonVenv()+
+		" && pip install --index-url https://pypi.org/simple --extra-index-url https://download.pytorch.org/whl/cu118 -r requirements.txt"
+		,  { cwd: context.extensionUri.fsPath });
 	}
 
 	async function findPythonCommand(): Promise<'python' | 'python3' | null> {
