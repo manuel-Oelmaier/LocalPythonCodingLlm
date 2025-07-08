@@ -42,11 +42,11 @@ text_generator = pipeline(
 )
 
 def generate_response(prompt:str) -> str:
-    parts = prompt.split("test",1)
+    text,tests = prompt.split("test",1)
     prompt_build = f"""
                    ### Instruction: Write a python function based on the text, and the tests. Make sure to name it after the assert test. Please only return executable python code without assert tests.
-                   ### text: Write a function to count the number of vowels in a given string
-                   ### assert test:assert count_vowels("python") == 1, assert count_vowels("a") == 1
+                   ### text: {text}
+                   ### assert test: {tests}
                    ### Response:
                 """
     response = text_generator(prompt_build)
