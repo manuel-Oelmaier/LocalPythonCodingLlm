@@ -45,24 +45,25 @@ def generate_response(prompt:str) -> str:
     parts = prompt.split("test",1)
     prompt_build = f"""
                    ### Instruction: Write a python function based on the text, and the tests. Make sure to name it after the assert test. Please only return executable python code without assert tests.
-                   ### text: {parts[0]}
-                   ### assert test: {parts[1]}
+                   ### text: Write a function to count the number of vowels in a given string
+                   ### assert test:assert count_vowels("python") == 1, assert count_vowels("a") == 1
                    ### Response:
                 """
     response = text_generator(prompt_build)
-    gen_text = response[0]["generated_text"]
-    
+    gen_text = response[0]['generated_text']
+
     if "Response:" in gen_text:
-       return gen_text.split("Response:", 1)
+       return gen_text.split("Response:", 1)[1].strip()
     
     return gen_text
 
 print("LLM is ready to receive input.", flush=True)
 
 
+
 for line in sys.stdin:
     try:
-        response = generate_response(line.strip())
+        response = generate_response(line)
         print(response, flush=True)
     except Exception as e:
         print({"error": str(e)}, flush=True,file=sys.stderr)

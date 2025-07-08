@@ -27,7 +27,9 @@ export async function activate(context: vscode.ExtensionContext) {
 					await startLLMWithChat(stream);
 				}
 				const response = await queryLLM(request.prompt);
-				stream.markdown("Code: \n"+response);
+				// renders it as a code with indents and everything
+				stream.markdown('```bash\n');
+				stream.markdown(response);
 				break;
 			case "startLLM":
 				if(!LLMready){
@@ -164,6 +166,7 @@ export async function activate(context: vscode.ExtensionContext) {
 			return ". .LocalPythonCodingLLMEnv/bin/activate";
 		}
 	}
+
 }
 
 export function deactivate() {}
