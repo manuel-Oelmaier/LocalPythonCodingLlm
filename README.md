@@ -1,27 +1,27 @@
-# LocalPythonCodingLlm README
+# LocalPythonCodingLlm 
 
-This extensision runs a LLM model locally with python.You can query like in chatwindow.
+This extensision runs a LLM model locally with python.You can query it in the Chatwindow.
 
 
 ## Features
+- offline 
+- no data collection
+- open source 
+- unlimited queries
 
-- query an LLM that generates Code that passes the Tests.
-- The LLM runs locally so your data is safe 
-- Alternativly generate Code based on a description in the Chat window.
+keep in mind: Chatgpt/Copilot will be more accurate, since they have more processing power etc ...
 
 
 ## Requirements
-
-python in the PATH
-Python Extension form Microsoft
-
+- python in the PATH
+- github.copilot-chat extension in VSC
 ## Issues
 
 please report issues to https://github.com/manuel-Oelmaier/LocalPythonCodingLlm/issues
 
 ## Release Notes
 
-### 0.0.1 began extension
+### 0.0.1 extension release
 
 
 
