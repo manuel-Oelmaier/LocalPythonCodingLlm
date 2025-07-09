@@ -3,6 +3,7 @@
   "displayName": "LocalPythonCodingLLM",
   "description": "This Extensions runs an LLM on unit Test and documentation and writes a function that passes the Tests in Python. ",
   "publisher": "LocalPythonCodingLlm",
+  "license": "MIT",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.101.0"
