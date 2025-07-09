@@ -59,7 +59,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	};
 
 	const LLMChat = vscode.chat.createChatParticipant('LocalPythonCodingLLM', handler);
-	LLMChat.iconPath = vscode.Uri.joinPath(context.extensionUri,  'LLM.jpeg');
+	LLMChat.iconPath = vscode.Uri.joinPath(context.extensionUri,  'Images/LLM.jpeg');
 
 
 	let LLM: ChildProcessWithoutNullStreams | undefined = undefined;
