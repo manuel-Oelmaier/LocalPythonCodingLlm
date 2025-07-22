@@ -13,8 +13,8 @@
     "Other"
   ],
   "activationEvents": [
-    "onChatParticipant:LocalPythonCodingLLM",
-    "onStartupFinished"
+    "onStartupFinished",
+    "onChatParticipant:LocalPythonCodingLLM"
   ],
   "extensionDependencies": [
     "github.copilot-chat"
