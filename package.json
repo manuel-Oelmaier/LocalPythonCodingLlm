@@ -1,8 +1,8 @@
 {
-  "name": "local-python-coding-llm",
+  "name": "LocalPythonCodingLLM",
   "displayName": "LocalPythonCodingLLM",
   "description": "This Extensions runs an LLM on unit Test and documentation and writes a function that passes the Tests in Python. ",
-  "publisher": "LocalPythonCodingLlm",
+  "publisher": "LocalPythonCodingLlM",
   "license": "MIT",
   "version": "0.0.6",
   "icon": "Images/LLM.png",
