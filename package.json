@@ -1,5 +1,5 @@
 {
-  "name": "LocalPythonCodingLLM",
+  "name": "local-python-coding-llm",
   "displayName": "LocalPythonCodingLLM",
   "description": "This Extensions runs an LLM on unit Test and documentation and writes a function that passes the Tests in Python. ",
   "publisher": "LocalPythonCodingLlm",

@@ -82,7 +82,8 @@ export async function activate(context: vscode.ExtensionContext) {
 	async function startLLM(stream_: vscode.ChatResponseStream): Promise<ChildProcessWithoutNullStreams> {
 		  return new Promise((resolve, reject) => {
 			const LLMpath = vscode.Uri.joinPath(context.extensionUri, "LLM.py").fsPath;
-			const activationVenv = process.platform === "win32" ? ".LocalPythonCodingLLMEnv/Scripts/python.exe" : ".LocalPythonCodingLLMEnv/bin/activate";
+			const activationVenv = process.platform === "win32" ? ".LocalPythonCodingLLMEnv/Scripts/python.exe" : ".LocalPythonCodingLLMEnv/bin/python";
+			console.log("activationVenv:", activationVenv);
 			const PythonPath = vscode.Uri.joinPath(context.extensionUri, activationVenv).fsPath;
 
 			const llm = spawn(PythonPath, [LLMpath],{cwd: context.extensionUri.fsPath});
