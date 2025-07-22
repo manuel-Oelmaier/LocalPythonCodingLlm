@@ -4,7 +4,7 @@
   "description": "This Extensions runs an LLM on unit Test and documentation and writes a function that passes the Tests in Python. ",
   "publisher": "LocalPythonCodingLlM",
   "license": "MIT",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "icon": "Images/LLM.png",
   "engines": {
     "vscode": "^1.101.0"
@@ -12,7 +12,9 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": ["onChatParticipant:LocalPythonCodingLLM"],
+  "activationEvents": [
+    "onChatParticipant:LocalPythonCodingLLM"
+  ],
   "extensionDependencies": [
     "github.copilot-chat"
   ],
