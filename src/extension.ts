@@ -24,7 +24,7 @@ export async function activate(context: vscode.ExtensionContext) {
 					await startLLMWithChat(stream);
 				}
 				const response = await queryLLM(request.prompt);
-				const testIncluded = request.prompt.includes("test") || request.prompt.includes("Test");
+				const testIncluded = request.prompt.includes("test");
 				if(!testIncluded){
 					stream.markdown("please include the word 'test' followed by assert tests for a better model response.  \n");
 				}
@@ -83,7 +83,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		  return new Promise((resolve, reject) => {
 			const LLMpath = vscode.Uri.joinPath(context.extensionUri, "LLM.py").fsPath;
 			const activationVenv = process.platform === "win32" ? ".LocalPythonCodingLLMEnv/Scripts/python.exe" : ".LocalPythonCodingLLMEnv/bin/activate";
-			const PythonPath = vscode.Uri.joinPath(context.extensionUri, ".LocalPythonCodingLLMEnv/bin/python").fsPath;
+			const PythonPath = vscode.Uri.joinPath(context.extensionUri, activationVenv).fsPath;
 
 			const llm = spawn(PythonPath, [LLMpath],{cwd: context.extensionUri.fsPath});
 
@@ -174,7 +174,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	function activationCommandPythonVenv(): string{
 		const operatingSystem = process.platform;
 		if(operatingSystem === "win32"){
-			return ".\.LocalPythonCodingLLMEnv\Scripts\activate.bat";
+			return ".LocalPythonCodingLLMEnv\\Scripts\\activate.bat";
 		}else {
 			// Assuming Linux or macOS, and we also dont konw what shell the user is using.
 			return ". .LocalPythonCodingLLMEnv/bin/activate";

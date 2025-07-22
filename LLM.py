@@ -29,7 +29,7 @@ if torch.cuda.is_available():
         device_map="auto"
     )
 else:
-    print("CUDA is not available,this will be very slow!\n If you have an NVIDIA GPU, please install the CUDA toolkit and restart your PC.", flush=True)
+    print("CUDA is not available, this will be very slow!\n If you have an NVIDIA GPU, please install the CUDA toolkit and restart your PC.", flush=True)
     # if cuda is not available, load the model in full precision and CPU
     basemodel = AutoModelForCausalLM.from_pretrained(basemodel_name)
 #

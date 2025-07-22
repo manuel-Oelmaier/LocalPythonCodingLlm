@@ -29,6 +29,8 @@ please report issues to https://github.com/manuel-Oelmaier/LocalPythonCodingLlm/
 
 ### 0.0.1 extension release
 
+### 0.0.5 fixed bugs in paticular one preventing it from working properly on windows,added non CUDA support
+
 
 
 
