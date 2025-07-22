@@ -16,6 +16,7 @@ keep in mind: Chatgpt/Copilot will be more accurate, since they have more proces
 ## Requirements
 - python in the PATH
 - github.copilot-chat extension in VSC
+- a gpu with CUDA is strongly recommended,otherwise the LLM will be very slow.
 
 ###
 Disclaimer: This extension generates code automatically. You are solely responsible for reviewing and testing any output before using it in production. No warranty is provided.

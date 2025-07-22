@@ -1,28 +1,37 @@
-# llm_server.py
 import sys,torch
-from transformers import AutoModelForCausalLM, AutoTokenizer,pipeline,BitsAndBytesConfig,logging
-from peft import PeftModel
 import warnings
 
-# so somthing like: device set to use cuda:0 from auto doesnt print as output for the user !
+
+from transformers import AutoModelForCausalLM, AutoTokenizer,pipeline,logging
+from peft import PeftModel
+from transformers import BitsAndBytesConfig
+
+# this is to ensure that the LLM server does not crash due to warnings
+# 
 warnings.filterwarnings("ignore")
 logging.set_verbosity_error()
+
+
 
 url = "Models/starcoder"
 basemodel_name = "Models/Starcoder_base"
 
-bnb_config = BitsAndBytesConfig(
-    load_in_4bit=True,
-    bnb_4bit_use_double_quant=True,
-    bnb_4bit_quant_type="nf4",
-    bnb_4bit_compute_dtype=torch.bfloat16
-)
-# load the quantized(reduced size in memory) basemodel
-basemodel = AutoModelForCausalLM.from_pretrained(
-    basemodel_name,
-    quantization_config = bnb_config,
-    device_map = "auto"
-)
+if torch.cuda.is_available():
+    bnb_config = BitsAndBytesConfig(
+        load_in_4bit=True,
+        bnb_4bit_use_double_quant=True,
+        bnb_4bit_quant_type="nf4",
+        bnb_4bit_compute_dtype=torch.bfloat16
+    )
+    basemodel = AutoModelForCausalLM.from_pretrained(
+        basemodel_name,
+        quantization_config=bnb_config,
+        device_map="auto"
+    )
+else:
+    # if cuda is not available, load the model in full precision and CPU
+    basemodel = AutoModelForCausalLM.from_pretrained(basemodel_name)
+#
 
 # load the finetuned weights 
 model = PeftModel.from_pretrained(basemodel, url)
@@ -41,7 +50,15 @@ text_generator = pipeline(
     max_new_tokens = 256,
 )
 
+# print a message to indicate that the LLM is ready, used only on startup   
+print("LLM is ready to receive input.", flush=True)
+
 def generate_response(prompt:str) -> str:
+    if "test" in prompt:
+        text, tests = prompt.split("test", 1)
+    else:
+        text, tests = prompt, ""
+
     text,tests = prompt.split("test",1)
     prompt_build = f"""
                    ### Instruction: Write a python function based on the text, and the tests. Make sure to name it after the assert test. Please only return executable python code without assert tests.
@@ -56,10 +73,6 @@ def generate_response(prompt:str) -> str:
        return gen_text.split("Response:", 1)[1].strip()
     
     return gen_text
-
-print("LLM is ready to receive input.", flush=True)
-
-
 
 for line in sys.stdin:
     try:

@@ -19,14 +19,15 @@ export async function activate(context: vscode.ExtensionContext) {
 	token: vscode.CancellationToken
 	) => {
 		switch (request.command) {
-			case "detectTests":
-				stream.markdown("Comming soon");
-				break;
 			case "queryLLM":
 				if(!LLMready){
 					await startLLMWithChat(stream);
 				}
 				const response = await queryLLM(request.prompt);
+				const testIncluded = request.prompt.includes("test") || request.prompt.includes("Test");
+				if(!testIncluded){
+					stream.markdown("please include the word 'test' followed by assert tests for a better model response.  \n");
+				}
 				// renders it as a code with indents and everything
 				stream.markdown('```bash\n');
 				stream.markdown(response);
@@ -48,7 +49,6 @@ export async function activate(context: vscode.ExtensionContext) {
 			case "help":
 			stream.markdown(` Here are some commands you can use:  
 			- help : Show this help message  
-			- detectTests : Detect tests in the current workspace  
 			- queryLLM : query the LLM with a prompt  AND tests
 			- startLLM : Load the LLM and get it ready for use
 			- stopLLM : Stop the LLM process and clean up resources
@@ -67,7 +67,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	let LLMready = false;	
 
 	async function startLLMWithChat(stream_: vscode.ChatResponseStream) {
-		stream_.markdown("Starting the LLM, this may take a few seconds...   \n");
+		stream_.progress("Starting the LLM, this may take a few seconds...   \n");
 		try{
 			LLM =  await startLLM();
 		}
@@ -82,6 +82,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	async function startLLM(): Promise<ChildProcessWithoutNullStreams> {
 		  return new Promise((resolve, reject) => {
 			const LLMpath = vscode.Uri.joinPath(context.extensionUri, "LLM.py").fsPath;
+			const activationVenv = process.platform === "win32" ? ".LocalPythonCodingLLMEnv/Scripts/python.exe" : ".LocalPythonCodingLLMEnv/bin/activate";
 			const PythonPath = vscode.Uri.joinPath(context.extensionUri, ".LocalPythonCodingLLMEnv/bin/python").fsPath;
 
 			const llm = spawn(PythonPath, [LLMpath],{cwd: context.extensionUri.fsPath});
@@ -139,7 +140,7 @@ export async function activate(context: vscode.ExtensionContext) {
 				throw new Error("couldnt create a virtual enviroment to install dependecies to run LLM!");
 			} 
 		}
-
+		// install the dependencies
 		const modules = await execAsync(activationCommandPythonVenv()+
 		" && pip install --index-url https://pypi.org/simple --extra-index-url https://download.pytorch.org/whl/cu118 -r requirements.txt"
 		,  { cwd: context.extensionUri.fsPath });
@@ -158,11 +159,13 @@ export async function activate(context: vscode.ExtensionContext) {
 			}
 		}
 	}
+
 	function activationCommandPythonVenv(): string{
 		const operatingSystem = process.platform;
 		if(operatingSystem === "win32"){
 			return ".\.LocalPythonCodingLLMEnv\Scripts\activate.bat";
 		}else {
+			// Assuming Linux or macOS, and we also dont konw what shell the user is using.
 			return ". .LocalPythonCodingLLMEnv/bin/activate";
 		}
 	}
