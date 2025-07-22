@@ -7,7 +7,6 @@ from peft import PeftModel
 from transformers import BitsAndBytesConfig
 
 # this is to ensure that the LLM server does not crash due to warnings
-# 
 warnings.filterwarnings("ignore")
 logging.set_verbosity_error()
 
@@ -17,6 +16,7 @@ url = "Models/starcoder"
 basemodel_name = "Models/Starcoder_base"
 
 if torch.cuda.is_available():
+    print("CUDA is available! Loading the Model...", flush=True)
     bnb_config = BitsAndBytesConfig(
         load_in_4bit=True,
         bnb_4bit_use_double_quant=True,
@@ -29,6 +29,7 @@ if torch.cuda.is_available():
         device_map="auto"
     )
 else:
+    print("CUDA is not available,this will be very slow!\n If you have an NVIDIA GPU, please install the CUDA toolkit and restart your PC.", flush=True)
     # if cuda is not available, load the model in full precision and CPU
     basemodel = AutoModelForCausalLM.from_pretrained(basemodel_name)
 #
@@ -76,7 +77,11 @@ def generate_response(prompt:str) -> str:
 
 for line in sys.stdin:
     try:
-        response = generate_response(line)
+        
+        response = ""
+        # to catch the case where the LLM resposn with an empty string
+        while not response:
+            response = generate_response(line)
         print(response, flush=True)
     except Exception as e:
         print({"error": str(e)}, flush=True,file=sys.stderr)

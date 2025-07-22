@@ -69,17 +69,17 @@ export async function activate(context: vscode.ExtensionContext) {
 	async function startLLMWithChat(stream_: vscode.ChatResponseStream) {
 		stream_.progress("Starting the LLM, this may take a few seconds...   \n");
 		try{
-			LLM =  await startLLM();
+			LLM =  await startLLM(stream_);
 		}
 		catch (error) {
 			console.error("Error starting LLM:", error);
 			stream_.markdown("An error occurred while starting the LLM: " + error);
 			return;
 		}
-		stream_.markdown("LLM started with PID: " + LLM!.pid+ "  \n");
+		stream_.progress("LLM started with PID: " + LLM!.pid+ "  \n");
 	}
 
-	async function startLLM(): Promise<ChildProcessWithoutNullStreams> {
+	async function startLLM(stream_: vscode.ChatResponseStream): Promise<ChildProcessWithoutNullStreams> {
 		  return new Promise((resolve, reject) => {
 			const LLMpath = vscode.Uri.joinPath(context.extensionUri, "LLM.py").fsPath;
 			const activationVenv = process.platform === "win32" ? ".LocalPythonCodingLLMEnv/Scripts/python.exe" : ".LocalPythonCodingLLMEnv/bin/activate";
@@ -94,15 +94,26 @@ export async function activate(context: vscode.ExtensionContext) {
 
 			llm.on('close', (code) => {
 				console.log(`LLM process exited with code ${code}`);
+				stream_.markdown(`LLM process exited with code ${code}. Please restart the LLM if you want to use it again.`);
+				LLMready = false;
 			});
+
 			llm.stdout.once("data", (data) => {
+				// Writes if CUDA is available or not.
 				const message = data.toString();
-				if (message.includes("LLM is ready to receive input.")) {
-					resolve(llm);
-					LLMready = true;
-				} else {
-					reject(new Error("LLM did not become ready as expected."));
-				}
+				stream_.progress(message);
+
+				// Catches the LLM is ready message.
+				llm.stdout.once("data", (data) => {
+					const message = data.toString();
+					stream_.progress(message);
+					if (message.includes("LLM is ready to receive input.")) {
+						resolve(llm);
+						LLMready = true;
+					} else {
+						reject(new Error("LLM did not become ready as expected."));
+					}
+				});
 			});
 	  	return llm;
 		});
