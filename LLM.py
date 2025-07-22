@@ -31,7 +31,11 @@ if torch.cuda.is_available():
 else:
     print("CUDA is not available, this will be very slow!\n If you have an NVIDIA GPU, please install the CUDA toolkit and restart your PC.", flush=True)
     # if cuda is not available, load the model in full precision and CPU
-    basemodel = AutoModelForCausalLM.from_pretrained(basemodel_name)
+    try:
+        basemodel = AutoModelForCausalLM.from_pretrained(basemodel_name)
+    except Exception as e:
+        print(f"Error loading the model: {e} \n Stoping the LLM!", flush=True)
+        sys.exit(1)
 #
 
 # load the finetuned weights 
