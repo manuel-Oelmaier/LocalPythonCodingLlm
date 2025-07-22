@@ -7,11 +7,6 @@ let LLM: ChildProcessWithoutNullStreams | undefined = undefined;
 
 export async function activate(context: vscode.ExtensionContext) {
 	console.log('Congratulations, your extension "LocalPythonCodingLLM" is now active!');
-
-	// To await Terminal commands for the venv installation.
-	const execAsync = promisify(exec);
-	await createVenv();
-
 	// Logic for the chat Bot, simple commands.
 	const handler: vscode.ChatRequestHandler = async (
 	request: vscode.ChatRequest,
@@ -66,6 +61,11 @@ export async function activate(context: vscode.ExtensionContext) {
 	
 	// set to true when the LLM is loaded and the python process responds.
 	let LLMready = false;	
+
+	// To await Terminal commands for the venv installation.
+	const execAsync = promisify(exec);
+	await createVenv();
+
 
 	async function startLLMWithChat(stream_: vscode.ChatResponseStream) {
 		stream_.progress("Starting the LLM, this may take a few seconds...   \n");
@@ -141,6 +141,11 @@ export async function activate(context: vscode.ExtensionContext) {
 	}
 	async function createVenv(){
 		const venvPath  = await vscode.workspace.getWorkspaceFolder(vscode.Uri.joinPath(context.extensionUri, ".LocalPythonCodingLLMEnv"));
+		// check if the virtual environment already exists
+		if(await fileExists(venvPath?.uri)){
+			return;
+		}
+
 		const python = await findPythonCommand();
 		if(!python){
 			throw new Error("neither python nor python3 seem to be in the %PATH% ");
@@ -182,6 +187,19 @@ export async function activate(context: vscode.ExtensionContext) {
 			return ". .LocalPythonCodingLLMEnv/bin/activate";
 		}
 	}
+	async function fileExists(uri: vscode.Uri | undefined): Promise<boolean> {
+		if (!uri) {
+			return false;
+		}
+
+		try {
+			// This tries to stat the file. If it exists, returns file info.
+			await vscode.workspace.fs.stat(uri);
+			return true; // No error, file exists
+		} catch (err) {
+			return false; // stat failed, file does not exist
+		}
+}
 
 }
 
