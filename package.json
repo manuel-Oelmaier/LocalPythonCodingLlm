@@ -12,7 +12,7 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": ["onChatParticipant:LocalPythonCodingLLM"],
   "extensionDependencies": [
     "github.copilot-chat"
   ],
@@ -29,10 +29,6 @@
           {
             "name": "help",
             "description": "display options for usage"
-          },
-          {
-            "name": "detectTests",
-            "description": "TODO"
           },
           {
             "name": "queryLLM",

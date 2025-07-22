@@ -2,6 +2,7 @@ import { spawn,exec, ChildProcessWithoutNullStreams } from 'child_process';
 import * as vscode from 'vscode';
 import { promisify } from 'util';
 
+let LLM: ChildProcessWithoutNullStreams | undefined = undefined;
 
 
 export async function activate(context: vscode.ExtensionContext) {
@@ -23,11 +24,11 @@ export async function activate(context: vscode.ExtensionContext) {
 				if(!LLMready){
 					await startLLMWithChat(stream);
 				}
-				const response = await queryLLM(request.prompt);
 				const testIncluded = request.prompt.includes("test");
 				if(!testIncluded){
 					stream.markdown("please include the word 'test' followed by assert tests for a better model response.  \n");
 				}
+				const response = await queryLLM(request.prompt);
 				// renders it as a code with indents and everything
 				stream.markdown('```bash\n');
 				stream.markdown(response);
@@ -49,9 +50,9 @@ export async function activate(context: vscode.ExtensionContext) {
 			case "help":
 			stream.markdown(` Here are some commands you can use:  
 			- help : Show this help message  
-			- queryLLM : query the LLM with a prompt  AND tests
-			- startLLM : Load the LLM and get it ready for use
-			- stopLLM : Stop the LLM process and clean up resources
+			- queryLLM : query the LLM with a prompt  AND tests  
+			- startLLM : Load the LLM and get it ready for use  
+			- stopLLM : Stop the LLM process and clean up resources  
 			`);			
 
 		}
@@ -62,7 +63,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	LLMChat.iconPath = vscode.Uri.joinPath(context.extensionUri,  'Images/LLM.jpeg');
 
 
-	let LLM: ChildProcessWithoutNullStreams | undefined = undefined;
+	
 	// set to true when the LLM is loaded and the python process responds.
 	let LLMready = false;	
 
@@ -184,7 +185,9 @@ export async function activate(context: vscode.ExtensionContext) {
 
 }
 
-export function deactivate() {}
+export function deactivate() {
+	LLM?.kill();
+}
 
 
 
